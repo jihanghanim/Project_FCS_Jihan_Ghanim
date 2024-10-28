@@ -1,3 +1,5 @@
+import random
+
 #We Deliver System
 
 #main menu 
@@ -27,13 +29,72 @@ class Driver:
 
     def __init__(self, drivers):
         
-        
         self.drivers= drivers
+
     #view all drivers
     def viewDriver(self):
         for id in self.drivers:
             for name in self.drivers[id]:
                 print('ID'+id, name,self.drivers[id][name]) 
+    
+    #add new driver
+    def addDriver(self):
+
+        self.name= input("Enter the driver's name: ").capitalize()
+        self.start_city= input("Enter the driver's start city: ").capitalize()
+        print(self.start_city)
+        #if driver name is empty or starting city is empty enter them again
+        while not self.name or not self.start_city:
+            self.name= input("Enter the driver's name: ").capitalize()
+            self.start_city= input("Enter the driver's start city: ").capitalize()
+        
+        #generate a random unique id
+        def genId(self):
+            self.start= 1
+            self.end=100
+            # increase range of random numbers when needed
+            while self.end<= len(self.drivers):
+                self.start +=100
+                self.end +=100
+
+            id_num= random.randint(self.start, self.end)
+            
+            #ensure a unique id is generated
+            while id_num in self.drivers:
+
+                id_num= random.randint(self.start, self.end)
+            return id_num        
+        
+        #add the starting city of the driver
+        def addCity(self):
+            #create a list of all available cities 
+            self.cities=[] 
+            for id in self.drivers:
+                for name in self.drivers[id]:
+                    if self.drivers[id][name].capitalize() not in self.cities:
+                        self.cities.append(self.drivers[id][name].capitalize()) 
+            
+            #if the starting city is not available, ask user
+            if self.start_city not in self.cities:
+                self.valid_city= input("This city is invalid. Do you still want to add it? y/n ")
+
+                #add driver and starting city to dictionary of drivers        
+                if self.valid_city== 'y':
+                    id_num= genId(self)
+                    self.drivers[id_num]= {self.name: self.start_city}
+                    print(f'{self.name}: {self.start_city} is added.')
+                #do not add driver and starting city to dictionary of drivers
+                else:
+                    print('The driver and its starting city is not added.' )
+            #starting city is available        
+            else:
+                id_num= genId(self)
+                #add driver and starting city to dictionary of drivers
+                self.drivers[id_num]= {self.name: self.start_city}
+                print(f'{self.name}: {self.start_city} is added.')
+
+        addCity(self)
+
 
 #run system
 if __name__== "__main__":
@@ -49,7 +110,9 @@ if __name__== "__main__":
         #view all drivers
         if dm==1:
             drive.viewDriver()
-                    
+        #add a driver
+        elif dm==2:
+            drive.addDriver()                    
     #exit system
     if m.menu==3:
         m.exitSys()
