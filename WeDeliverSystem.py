@@ -22,6 +22,19 @@ class Mainmenu:
 
         return self.driver_choice
 
+#drivers'menu options
+class Driver:
+
+    def __init__(self, drivers):
+        
+        
+        self.drivers= drivers
+    #view all drivers
+    def viewDriver(self):
+        for id in self.drivers:
+            for name in self.drivers[id]:
+                print('ID'+id, name,self.drivers[id][name]) 
+
 #run system
 if __name__== "__main__":
     
@@ -32,6 +45,11 @@ if __name__== "__main__":
     #drivers'menu
     if m.menu==1:
         dm=m.driversMenu()
+        drive= Driver(drivers)
+        #view all drivers
+        if dm==1:
+            drive.viewDriver()
+                    
     #exit system
     if m.menu==3:
         m.exitSys()
