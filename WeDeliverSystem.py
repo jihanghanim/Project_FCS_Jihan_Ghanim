@@ -177,6 +177,24 @@ class Cities:
         cities= self.mergeSort(cities, start, end)
         print('Cities:', ', '.join(cities))
 
+    #search cities
+    def searchCities(self):
+        city_key= input('Enter a key and the' 
+                        + 'system will output all cities containing this key: ').lower()
+        match_cities=[]
+        cities=[] 
+        for id in self.drivers:
+            for name in self.drivers[id]:
+                if self.drivers[id][name].lower() not in cities:
+                    cities.append(self.drivers[id][name].lower())
+
+        for city in cities:
+            if city_key in city:
+                match_cities.append(city.capitalize())
+        if match_cities:
+            print('The matching cities:', ' ,'.join(match_cities))
+        else:
+            print(f'No cities contain \'{city_key}\'.')
 #run system
 if __name__== "__main__":
     
@@ -204,7 +222,9 @@ if __name__== "__main__":
         #show all cities in descending order
         if cm==1:
             Cities(drivers).showCities()
-    
+        #search for cities with a given key
+        if cm==2:
+            Cities(drivers).searchCities()    
     #exit system
     if m.menu==3:
         m.exitSys()
