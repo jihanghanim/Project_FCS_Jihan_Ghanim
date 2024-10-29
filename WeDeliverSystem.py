@@ -14,7 +14,7 @@ class Mainmenu:
     def exitSys(self):
         return
     
-    #drivers' menu
+    #go to drivers' menu
     def driversMenu(self):
 
         self.driver_choice= int(input('Enter:\n1 To view all the drivers'
@@ -23,6 +23,16 @@ class Mainmenu:
                                  + '\n4 To go back to the main menu\n'))
 
         return self.driver_choice
+
+    # go to cities' menu
+    def CitiesMenu(self):
+
+        self.city_choice= int(input('Enter:\n1 Show cities'
+                                 + '\n2 Search city'
+                                 + '\n3 Print neighboring cities'
+                                 + '\n4 Print Drivers delivering to city\n'))
+
+        return self.city_choice
 
 #drivers'menu options
 class Driver:
@@ -111,6 +121,8 @@ class Driver:
                         self.sim_drivers.append(name)
             print(city + ':',', '.join(self.sim_drivers)) 
 
+
+
 #run system
 if __name__== "__main__":
     
@@ -118,7 +130,7 @@ if __name__== "__main__":
     drivers= {'1':{'Adam': 'Beirut'}, '2':{'Peter': 'Beirut'}, '3':{'Roy': 'Zahle'}}
     #mainmenu 
     m= Mainmenu()
-    #drivers'menu
+    # go to drivers'menu
     if m.menu==1:
         dm=m.driversMenu()
         drive= Driver(drivers)
@@ -131,6 +143,11 @@ if __name__== "__main__":
         #similar drivers
         elif dm==3:
             drive.similarDrivers()                    
+    
+    #go to cities' menu
+    if m.menu==2:    
+        m.CitiesMenu()
+    
     #exit system
     if m.menu==3:
         m.exitSys()
