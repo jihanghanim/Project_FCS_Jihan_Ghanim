@@ -95,12 +95,27 @@ class Driver:
 
         addCity(self)
 
+    #similar drivers
+    def similarDrivers(self):
+        self.cities=[] 
+        for id in self.drivers:
+            for name in self.drivers[id]:
+                if self.drivers[id][name].capitalize() not in self.cities:
+                    self.cities.append(self.drivers[id][name].capitalize())         
+
+        for city in self.cities:
+            self.sim_drivers=[]
+            for id in self.drivers:
+                for name in self.drivers[id]:
+                    if self.drivers[id][name].capitalize()== city:
+                        self.sim_drivers.append(name)
+            print(city + ':',', '.join(self.sim_drivers)) 
 
 #run system
 if __name__== "__main__":
     
     #predefined drivers with starting city
-    drivers= {'1':{'Adam': 'Beirut'}}
+    drivers= {'1':{'Adam': 'Beirut'}, '2':{'Peter': 'Beirut'}, '3':{'Roy': 'Zahle'}}
     #mainmenu 
     m= Mainmenu()
     #drivers'menu
@@ -112,7 +127,10 @@ if __name__== "__main__":
             drive.viewDriver()
         #add a driver
         elif dm==2:
-            drive.addDriver()                    
+            drive.addDriver()
+        #similar drivers
+        elif dm==3:
+            drive.similarDrivers()                    
     #exit system
     if m.menu==3:
         m.exitSys()
