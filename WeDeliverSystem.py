@@ -17,22 +17,25 @@ class Mainmenu:
     #go to drivers' menu
     def driversMenu(self):
 
-        self.driver_choice= int(input('Enter:\n1 To view all the drivers'
+        driver_choice= int(input('Enter:\n1 To view all the drivers'
                                  + '\n2 To add a driver'
                                  + '\n3 Check similar drivers'
                                  + '\n4 To go back to the main menu\n'))
 
-        return self.driver_choice
+        return driver_choice
 
     # go to cities' menu
     def CitiesMenu(self):
 
-        self.city_choice= int(input('Enter:\n1 Show cities'
+        city_choice= int(input('Enter:\n1 Show cities'
                                  + '\n2 Search city'
                                  + '\n3 Print neighboring cities'
                                  + '\n4 Print Drivers delivering to city\n'))
 
-        return self.city_choice
+        return city_choice
+
+
+    
 
 #drivers'menu options
 class Driver:
@@ -45,83 +48,134 @@ class Driver:
     def viewDriver(self):
         for id in self.drivers:
             for name in self.drivers[id]:
-                print('ID'+id, name,self.drivers[id][name]) 
+                print(f'ID{id}, {name}, {self.drivers[id][name]}') 
     
+    #generate a random unique id
+    def genId(self):
+        start= 1
+        end=100
+        # increase range of random numbers when needed
+        while end<= len(self.drivers):
+            start +=100
+            end +=100
+
+        id_num= random.randint(start, end)
+        
+        #ensure a unique id is generated
+        while id_num in self.drivers:
+
+            id_num= random.randint(start, end)
+        return id_num 
+
+    #add the starting city of the driver
+    def addCity(self, start_city, name):
+        #create a list of all available cities 
+        cities=[] 
+        for id in self.drivers:
+            for n in self.drivers[id]:
+                if self.drivers[id][n].capitalize() not in cities:
+                    cities.append(self.drivers[id][n].capitalize()) 
+        
+        #if the starting city is not available, ask user
+        if start_city not in cities:
+            valid_city= input("This city is invalid. Do you still want to add it? y/n ")
+
+            #add driver and starting city to dictionary of drivers        
+            if valid_city== 'y':
+                id_num= self.genId()
+                self.drivers[id_num]= {name: start_city}
+                print(f'{name}: {start_city} is added.')
+            #do not add driver and starting city to dictionary of drivers
+            else:
+                print('The driver and its starting city is not added.' )
+        #starting city is available        
+        else:
+            id_num= self.genId()
+            #add driver and starting city to dictionary of drivers
+            self.drivers[id_num]= {name: start_city}
+            print(f'{name}: {start_city} is added.')
+
+
     #add new driver
     def addDriver(self):
 
-        self.name= input("Enter the driver's name: ").capitalize()
-        self.start_city= input("Enter the driver's start city: ").capitalize()
-        print(self.start_city)
+        name= input("Enter the driver's name: ").capitalize()
+        start_city= input("Enter the driver's start city: ").capitalize()
+       
         #if driver name is empty or starting city is empty enter them again
-        while not self.name or not self.start_city:
-            self.name= input("Enter the driver's name: ").capitalize()
-            self.start_city= input("Enter the driver's start city: ").capitalize()
-        
-        #generate a random unique id
-        def genId(self):
-            self.start= 1
-            self.end=100
-            # increase range of random numbers when needed
-            while self.end<= len(self.drivers):
-                self.start +=100
-                self.end +=100
-
-            id_num= random.randint(self.start, self.end)
-            
-            #ensure a unique id is generated
-            while id_num in self.drivers:
-
-                id_num= random.randint(self.start, self.end)
-            return id_num        
-        
-        #add the starting city of the driver
-        def addCity(self):
-            #create a list of all available cities 
-            self.cities=[] 
-            for id in self.drivers:
-                for name in self.drivers[id]:
-                    if self.drivers[id][name].capitalize() not in self.cities:
-                        self.cities.append(self.drivers[id][name].capitalize()) 
-            
-            #if the starting city is not available, ask user
-            if self.start_city not in self.cities:
-                self.valid_city= input("This city is invalid. Do you still want to add it? y/n ")
-
-                #add driver and starting city to dictionary of drivers        
-                if self.valid_city== 'y':
-                    id_num= genId(self)
-                    self.drivers[id_num]= {self.name: self.start_city}
-                    print(f'{self.name}: {self.start_city} is added.')
-                #do not add driver and starting city to dictionary of drivers
-                else:
-                    print('The driver and its starting city is not added.' )
-            #starting city is available        
-            else:
-                id_num= genId(self)
-                #add driver and starting city to dictionary of drivers
-                self.drivers[id_num]= {self.name: self.start_city}
-                print(f'{self.name}: {self.start_city} is added.')
-
-        addCity(self)
+        while not name or not start_city:
+            name= input("Enter the driver's name: ").capitalize()
+            start_city= input("Enter the driver's start city: ").capitalize()
+        #add driver and starting city
+        self.addCity(start_city, name)
 
     #similar drivers
     def similarDrivers(self):
-        self.cities=[] 
+        cities=[] 
         for id in self.drivers:
             for name in self.drivers[id]:
-                if self.drivers[id][name].capitalize() not in self.cities:
-                    self.cities.append(self.drivers[id][name].capitalize())         
+                if self.drivers[id][name].capitalize() not in cities:
+                    cities.append(self.drivers[id][name].capitalize())         
 
-        for city in self.cities:
-            self.sim_drivers=[]
+        for city in cities:
+            sim_drivers=[]
             for id in self.drivers:
                 for name in self.drivers[id]:
                     if self.drivers[id][name].capitalize()== city:
-                        self.sim_drivers.append(name)
-            print(city + ':',', '.join(self.sim_drivers)) 
+                        sim_drivers.append(name)
+            print(city + ':',', '.join(sim_drivers)) 
+
+#cities' menu options
+class Cities:
+    def __init__(self, drivers):
+        self.drivers= drivers
+
+    #merge sort
+    def merge(self, list1, start,end):
+        mid= (start + end)//2
+
+        i= start
+        j= mid +1
+        temp =[]
+
+        while i<=mid and j <= end:
+            if list1[i]> list1[j]:
+                temp.append(list1[i])
+                i +=1
+            else:
+                temp.append(list1[j])
+                j +=1
+        
+        while i<=mid:
+            temp.append(list1[i])
+            i +=1
+        while j<=end:
+            temp.append(list1[j])
+            j +=1                
+        
+        list1[start:end+1]= temp
 
 
+    def mergeSort(self,list1, start, end):
+        if start==end:
+            return list1
+        mid = (start + end)//2
+        self.mergeSort(list1, start, mid)
+        self.mergeSort(list1, mid +1, end)
+        self.merge(list1, start,end)
+        return list1
+    
+    #show cities in descending order
+    def showCities(self):
+        cities=[] 
+        for id in self.drivers:
+            for name in self.drivers[id]:
+                if self.drivers[id][name].capitalize() not in cities:
+                    cities.append(self.drivers[id][name].capitalize())        
+        start=0
+        end= len(cities) -1
+        cities= self.mergeSort(cities, start, end)
+        print('Cities:', ', '.join(cities))
 
 #run system
 if __name__== "__main__":
@@ -146,7 +200,10 @@ if __name__== "__main__":
     
     #go to cities' menu
     if m.menu==2:    
-        m.CitiesMenu()
+        cm=m.CitiesMenu()
+        #show all cities in descending order
+        if cm==1:
+            Cities(drivers).showCities()
     
     #exit system
     if m.menu==3:
