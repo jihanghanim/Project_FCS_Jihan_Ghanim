@@ -307,11 +307,9 @@ class CitiesGraph():
         if neighbor== False:
             print('No Drivers delivering to this city.')
 
-#run system
-if __name__== "__main__":
-    
-    #predefined drivers with starting city
-    drivers= {'1':{'Adam': 'Beirut'}, '2':{'Peter': 'Beirut'}, '3':{'Roy': 'Zahle'}, '4': {'Oliver': 'Jbeil'}}
+
+#we deliver system
+def weDeliver(drivers, dic_graph):
     #mainmenu 
     m= Mainmenu()
     # go to drivers'menu
@@ -326,8 +324,10 @@ if __name__== "__main__":
             drive.addDriver()
         #similar drivers
         elif dm==3:
-            drive.similarDrivers()                    
-    
+            drive.similarDrivers()
+        #go back to main menu                    
+        elif dm==4:
+            weDeliver(drivers, dic_graph)     
     #go to cities' menu
     if m.menu==2:    
         cm=m.CitiesMenu()
@@ -340,7 +340,7 @@ if __name__== "__main__":
         
         #neighboring cities
         if cm==3:
-            dic_graph= {0:'Akkar', 1: 'Jbeil', 2: 'Beirut', 3: 'Saida', 4: 'Zahle'}
+            #dic_graph= {0:'Akkar', 1: 'Jbeil', 2: 'Beirut', 3: 'Saida', 4: 'Zahle'}
             G=CitiesGraph(len(dic_graph))
             G.add_edge(1,2)
             G.add_edge(1,0)
@@ -349,7 +349,7 @@ if __name__== "__main__":
         
         #print drivers delivering to this city
         if cm==4:
-            dic_graph= {0:'Akkar', 1: 'Jbeil', 2: 'Beirut', 3: 'Saida', 4: 'Zahle'}
+            #dic_graph= {0:'Akkar', 1: 'Jbeil', 2: 'Beirut', 3: 'Saida', 4: 'Zahle'}
             G=CitiesGraph(len(dic_graph))
             G.add_edge(1,2)
             G.add_edge(1,0)
@@ -358,3 +358,16 @@ if __name__== "__main__":
     #exit system
     if m.menu==3:
         m.exitSys()
+
+#run system
+if __name__== "__main__":
+    
+    #predefined drivers with starting city
+    drivers= {'1':{'Adam': 'Beirut'}, '2':{'Peter': 'Beirut'}, '3':{'Roy': 'Zahle'}, '4': {'Oliver': 'Jbeil'}}
+    #cities map
+    dic_graph= {0:'Akkar', 1: 'Jbeil', 2: 'Beirut', 3: 'Saida', 4: 'Zahle'}
+
+    #We dilver system
+    weDeliver(drivers, dic_graph)
+
+    
