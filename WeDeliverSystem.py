@@ -216,31 +216,64 @@ class LinkedList:
             n=Node(val,self.head)
             self.head=n
             self.size+=1
+    #print the neighbor cities of the targeted city
     def printLL(self,dic_graph): 
         found= False
         temp=self.head 
-      
-        if temp== None:
-                print('No neighboring cities')
         while temp!=None:
-                
-            dic_graph= {0:'Akkar', 1: 'Jbeil', 2: 'Beirut', 3: 'Saida', 4: 'Zahle'}
             if temp.info in dic_graph:
                 found=True
+                #print neighboring city name
                 print(dic_graph[temp.info])
             temp=temp.next
-        print()
+                
         return found
-#print neighbor cities
+    #print the drivers delivering the targeted city
+    def printDrivers(self,dic_graph,drivers, key):
+        sim_drivers=[]
+        self.drivers=  drivers
+        found= False
+        temp=self.head
+
+        #No neighbor cities of the targted city
+        #only print the driver that has the targeted city as its starting city
+        if temp==None:
+            for id in self.drivers:
+                for name in self.drivers[id]:
+                    if self.drivers[id][name].capitalize()== dic_graph[key]:
+                        sim_drivers.append(name)
+                        found=True      
+
+        #The targted city has  neighbor cities of the targted city 
+        #print the driver that has the targeted city as its starting city
+        # and print the drivers of its neighbor cities        
+        while temp!=None:
+            if temp.info in dic_graph:
+                
+                for id in self.drivers:
+                    for name in self.drivers[id]:
+                        start_driver= self.drivers[id][name].capitalize()== dic_graph[key]
+
+                        if self.drivers[id][name].capitalize()== dic_graph[temp.info] or start_driver:
+                            sim_drivers.append(name)
+                            found=True              
+                
+            temp=temp.next
+        sim_drivers =list(set(sim_drivers))
+        print(', '.join(sim_drivers)) 
+        return found 
+      
+
 class CitiesGraph():
     def __init__(self,V):
         self.list=[]
         for i in range(V):
             self.list.append(LinkedList())
-            
+    #create a graph pf the cities        
     def add_edge(self,n1,n2):
         self.list[n1].addToHead(n2)    
         self.list[n2].addToHead(n1)
+    #print neighbor cities
     def print_graph(self,dic_graph):
         user_city= input('Enter the city that you want to find its neighboring cities: ')
         neighbor=False
@@ -255,13 +288,30 @@ class CitiesGraph():
                             break
                     city_index +=1
         if neighbor== False:
-            print('Noo neighboring cities')
+            print('No neighboring cities')
+    
+    #print drivers delivering to this city
+    def deliveringDrivers(self, dic_graph,drivers):
+        user_city= input('Enter the city to find the drivers delivering to this city: ')
+        neighbor=False
+        for key in dic_graph:
+            if user_city.capitalize()== dic_graph[key]:
+                city_index=0
+                for i in self.list:  
+                    if city_index==key:       
+                        found=i.printDrivers(dic_graph,drivers, key)
+                        if found:
+                            neighbor=True
+                            break
+                    city_index +=1
+        if neighbor== False:
+            print('No Drivers delivering to this city.')
 
 #run system
 if __name__== "__main__":
     
     #predefined drivers with starting city
-    drivers= {'1':{'Adam': 'Beirut'}, '2':{'Peter': 'Beirut'}, '3':{'Roy': 'Zahle'}}
+    drivers= {'1':{'Adam': 'Beirut'}, '2':{'Peter': 'Beirut'}, '3':{'Roy': 'Zahle'}, '4': {'Oliver': 'Jbeil'}}
     #mainmenu 
     m= Mainmenu()
     # go to drivers'menu
@@ -287,6 +337,7 @@ if __name__== "__main__":
         #search for cities with a given key
         if cm==2:
             Cities(drivers).searchCities()
+        
         #neighboring cities
         if cm==3:
             dic_graph= {0:'Akkar', 1: 'Jbeil', 2: 'Beirut', 3: 'Saida', 4: 'Zahle'}
@@ -294,7 +345,16 @@ if __name__== "__main__":
             G.add_edge(1,2)
             G.add_edge(1,0)
             G.add_edge(4,3)
-            G.print_graph(dic_graph)    
+            G.print_graph(dic_graph)  
+        
+        #print drivers delivering to this city
+        if cm==4:
+            dic_graph= {0:'Akkar', 1: 'Jbeil', 2: 'Beirut', 3: 'Saida', 4: 'Zahle'}
+            G=CitiesGraph(len(dic_graph))
+            G.add_edge(1,2)
+            G.add_edge(1,0)
+            G.add_edge(4,3)
+            G.deliveringDrivers( dic_graph,drivers)  
     #exit system
     if m.menu==3:
         m.exitSys()
