@@ -327,7 +327,11 @@ def weDeliver(drivers, dic_graph):
             drive.similarDrivers()
         #go back to main menu                    
         elif dm==4:
-            weDeliver(drivers, dic_graph)     
+            weDeliver(drivers, dic_graph) 
+        #error handling
+        else:
+            print('Please enter a valid choice!')
+            return    
     #go to cities' menu
     if m.menu==2:    
         cm=m.CitiesMenu()
@@ -354,10 +358,20 @@ def weDeliver(drivers, dic_graph):
             G.add_edge(1,2)
             G.add_edge(1,0)
             G.add_edge(4,3)
-            G.deliveringDrivers( dic_graph,drivers)  
+            G.deliveringDrivers( dic_graph,drivers) 
+        #error handling
+        else:
+            print('Please enter a valid choice!')
+        return 
     #exit system
     if m.menu==3:
         m.exitSys()
+    
+    #error handling
+    else:
+        print('Please enter a valid choice!')
+        return
+
 
 #run system
 if __name__== "__main__":
