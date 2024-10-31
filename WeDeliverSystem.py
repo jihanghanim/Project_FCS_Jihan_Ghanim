@@ -5,7 +5,7 @@ import random
 #main menu 
 class Mainmenu:
     def __init__(self):
-        self.menu=  int(input('Enter:\n1 To go to the drivers\' menu'
+        self.menu=  int(input('Hello! Please enter:\n\n1 To go to the drivers\' menu'
                                  + '\n2 To go to the cities\' menu'
                                  + '\n3 To exit the system\n'
                                  ))
@@ -195,6 +195,68 @@ class Cities:
             print('The matching cities:', ' ,'.join(match_cities))
         else:
             print(f'No cities contain \'{city_key}\'.')
+
+#build a graph 
+class Node:
+    def __init__(self,info,n):
+        self.info=info
+        self.next=n
+class LinkedList:
+    def __init__(self):
+        self.head=None
+        self.tail=None
+        self.size=0
+    def addToHead(self,val): 
+        if self.size==0: 
+            n=Node(val,None)
+            self.head=n
+            self.tail=n
+            self.size+=1
+        else:
+            n=Node(val,self.head)
+            self.head=n
+            self.size+=1
+    def printLL(self,dic_graph): 
+        found= False
+        temp=self.head 
+      
+        if temp== None:
+                print('No neighboring cities')
+        while temp!=None:
+                
+            dic_graph= {0:'Akkar', 1: 'Jbeil', 2: 'Beirut', 3: 'Saida', 4: 'Zahle'}
+            if temp.info in dic_graph:
+                found=True
+                print(dic_graph[temp.info])
+            temp=temp.next
+        print()
+        return found
+#print neighbor cities
+class CitiesGraph():
+    def __init__(self,V):
+        self.list=[]
+        for i in range(V):
+            self.list.append(LinkedList())
+            
+    def add_edge(self,n1,n2):
+        self.list[n1].addToHead(n2)    
+        self.list[n2].addToHead(n1)
+    def print_graph(self,dic_graph):
+        user_city= input('Enter the city that you want to find its neighboring cities: ')
+        neighbor=False
+        for key in dic_graph:
+            if user_city.capitalize()== dic_graph[key]:
+                city_index=0
+                for i in self.list:  
+                    if city_index==key:       
+                        found=i.printLL(dic_graph)
+                        if found:
+                            neighbor=True
+                            break
+                    city_index +=1
+        if neighbor== False:
+            print('Noo neighboring cities')
+
 #run system
 if __name__== "__main__":
     
@@ -224,7 +286,15 @@ if __name__== "__main__":
             Cities(drivers).showCities()
         #search for cities with a given key
         if cm==2:
-            Cities(drivers).searchCities()    
+            Cities(drivers).searchCities()
+        #neighboring cities
+        if cm==3:
+            dic_graph= {0:'Akkar', 1: 'Jbeil', 2: 'Beirut', 3: 'Saida', 4: 'Zahle'}
+            G=CitiesGraph(len(dic_graph))
+            G.add_edge(1,2)
+            G.add_edge(1,0)
+            G.add_edge(4,3)
+            G.print_graph(dic_graph)    
     #exit system
     if m.menu==3:
         m.exitSys()
